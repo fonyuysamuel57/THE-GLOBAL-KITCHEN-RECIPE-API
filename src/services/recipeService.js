@@ -38,3 +38,8 @@ exports.getAllRecipes = async (category) => {
   const recipes = await Recipe.find(filter).sort({ createdAt: -1 });
   return recipes;
 };
+// sERVICE FUNCTION TO GET RECIPE BY ID
+exports.getRecipeById = async (id) => {
+  const recipe = await Recipe.findById(id);
+  return recipe;
+};
