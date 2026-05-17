@@ -50,3 +50,34 @@ exports.getRecipe = async (req, res, next) => {
     next(error);
   }
 };
+//controller function to be able to update a recipe
+
+exports.updateRecipe = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: `"${id}" is not a valid recipe ID`,
+      });
+    }
+
+    const updatedRecipe = await recipeService.updateRecipe(id, req.body);
+
+    if (!updatedRecipe) {
+      return res.status(404).json({
+        success: false,
+        message: `No recipe found with id ${id}`,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Recipe updated successfully",
+      data: updatedRecipe,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

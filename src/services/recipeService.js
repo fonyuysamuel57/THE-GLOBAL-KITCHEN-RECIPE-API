@@ -43,3 +43,31 @@ exports.getRecipeById = async (id) => {
   const recipe = await Recipe.findById(id);
   return recipe;
 };
+
+// function to update a recipe
+
+exports.updateRecipe = async (id, updateData) => {
+  // Prevent clients from overwriting the _id field
+  delete updateData._id;
+
+  // If cookingTime is being updated, enforce the positive-number rule
+  if (updateData.cookingTime !== undefined) {
+    const time = Number(updateData.cookingTime);
+    if (!Number.isFinite(time) || time <= 0) {
+      const error = new Error("Cooking time must be a positive number");
+      error.statusCode = 400;
+      throw error;
+    }
+    updateData.cookingTime = time;
+  }
+
+  const updatedRecipe = await Recipe.findByIdAndUpdate(
+    id,
+    { $set: updateData },
+    {
+      new: true, // Returned values
+      runValidators: true, // Re-run schema validators on the updated fields
+    },
+  );
+  return updatedRecipe;
+};
