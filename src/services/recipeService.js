@@ -16,7 +16,8 @@ exports.createRecipe = async (recipeData) => {
     error.statusCode = 400;
     throw error;
   }
-
+    //API model to egt new recipe
+    
   const newRecipe = await Recipe.create({
     title,
     ingredients,
@@ -27,4 +28,13 @@ exports.createRecipe = async (recipeData) => {
   });
 
   return newRecipe;
+};
+//API model to get all recipes
+exports.getAllRecipes = async (category) => {
+  const filter = {};
+  if (category) {
+    filter.category = { $regex: new RegExp(`^${category}$`, "i") };
+  }
+  const recipes = await Recipe.find(filter).sort({ createdAt: -1 });
+  return recipes;
 };
