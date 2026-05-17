@@ -71,3 +71,10 @@ exports.updateRecipe = async (id, updateData) => {
   );
   return updatedRecipe;
 };
+
+//Function to delete a recipe
+
+exports.deleteRecipe = async (id) => {
+  const deletedRecipe = await Recipe.findByIdAndDelete(id);
+  return deletedRecipe;
+};
